@@ -289,7 +289,57 @@ Si recargamos el navegador, podremos ver el recurso con el contenido actualizado
 
 ![Contenido automáticamente actualizado](./images/contenido_robots_actualizado.png)
 
+Es decir que al desplegar la aplicación mediante la vinculación de GitHub con una 
 
 ## Despliegue con Vercel
 
+Para realizar el despliegue con Vercel, creamos una cuenta también con nuestro correo 
+electrónico (realizaremos el "enlace con GitHub más adelante). Una vez en la página 
+principal de Vercel, se nos presentan varias opciones de proveedores git y escogemos 
+GitHub. Al igual que con Netlify, se nos abre una nueva ventana de GitHub que nos pide 
+autorizar a Vercel a consultar datos y a realizar acciones sobre GitHub en nombre 
+nuestro:
 
+![Permisos Vercel](./images/permisos_vercel.png)
+
+Se cerrará la ventana y ahora la página de Vercel habrá cambiado, mostrando la opción 
+para importar un repositorio de GitHub al que instalar la aplicación de Vercel:
+
+![Página importación de repositorio](./images/pag_importacion_vercel.png)
+
+Clicamos en "Install" y se volverá a abrir otra ventana de GitHub, donde tendremos un 
+menú con la lista de nuestras organizaciones, encabezada por nuestro usuario de GitHub, 
+idéntica a la que se mostraba en Netlify:
+
+![Instalación Vercel](./images/install_vercel.png)
+
+Selecciono mi usuario y de nuevo, podemos instalar la aplicación de Vercel en todos los 
+repositorios o sólo en uno. Seleccionamos el repositorio 'practica3-4':
+
+![Selección repositorio Vercel](./images/sel_repo_vercel.png)
+
+Se cierra la ventana y ahora en Vercel nos aparecerá el repositorio para importarlo:
+
+![Repositorio listo para importar en Vercel](./images/repo_en_vercel.png)
+
+Clicamos en "Import" y se nos dirige a la página de despliegue:
+
+![Página de despliegue en Vercel](./images/pag_deploy_vercel.png)
+
+Vercel tardará unos momentos en realizar el despliegue y cuando termine nos lo 
+notificará con un mensaje de celebración: 
+
+![Despliegue terminado en Vercel](./images/deploy_terminado_vercel.png)
+
+Y podremos acceder a la aplicación desplegada:
+
+![App desplegada Vercel](./images/app_desplegada_vercel.png)
+
+Volvemos a modificar localmente el archivo '/public/robots.txt':
+
+![Modificación robótica 2](./images/mod_robots_2.png)
+
+Subimos los cambios al repositorio remoto y recargamos la aplicación desplegada en 
+Vercel:
+
+![Modificación automáticamente desplegada en Vercel](./images/mod_automatica_vercel.png)
