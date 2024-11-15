@@ -166,4 +166,130 @@ lugar, eliminamos desde la página de Netlify la página desplegada anteriorment
 (accedemos a la configuración del site y bajamos hasta encontrar la opción 'delete site') 
 y en nuestra MV, eliminamos el directorio con el contenido de la aplicación.
 
-## Cuestiones sobre Netlify
+Para simular un proyecto que hemos desarrollado desde cero y del que, en principio, 
+sólo disponemos el código fuente en local, descargaremos el código fuente de la 
+misma aplicación que usamos en el despliegue anterior en un archivo zip desde GitHub, 
+crearemos un repositorio vacío y subiremos el código fuente de la aplicación. Para ello, 
+ejecutamos:
+
+```console
+# Comandos para bajar el código fuente: 
+
+mkdir practica3-4	# Creamos directorio para almacenar el código.
+wget https://github.com/StackAbuse/color-shades-generator/archive/refs/heads/main.zip	# Descargamos el código fuente de la aplicación.
+unzip main.zip -d practica3-4	# Descomprimimos el archivo con el código fuente en el directorio creado anteriormente.
+cd practica3-4/color-shades-generator-main/	# Nos colocamos en el directorio que contiene el código fuente.
+```
+
+En este momento es conveniente tener creado el repositorio vacío en GitHub. Para ello, 
+accedemos a la página y buscamos el botón de "Nuevo repositorio". En mi caso, mi 
+repositorio remoto se llama 'practica3-4'. 
+
+Además, es conveniente que creemos un par de claves pública-privada mediante SSH para 
+comunicar nuestra MV con GitHub. Para ello:
+
+```console
+ssh-keygen -t ed25519 -C "a23pebeal@iesgrancapitan.org"
+# Donde -t es una bandera que especifíca el algoritmo utilizado para generar las claves.
+# Donde -C es un comentario que añadimos a la clave, yo he utilizado el correo electrónico que tengo asociado a mi cuenta de Github, como indica su guía para generar claves SSH.
+```
+
+A continuación, el comando nos presenta unas preguntas que dejaremos en blanco, de 
+manera que las claves se almacenarán en el directorio por defecto '~/.ssh/' y no será 
+necesario indicar ninguna frase de seguridad para acceder a las claves. Por último, 
+añadimos la clave privada generada al manejador de claves:
+
+```console
+ssh-add ~/.ssh/id_ed25519
+```
+
+Momentáneamente dejamos el terminal, accedemos a nuestra cuenta de GitHub desde el 
+navegador, nos dirigimos a 'Settings/SSH and GPG keys/' y pulsamos 'Nueva clave SSH'.
+Debemos copiar y pegar el contenido de '~/.ssh/id_ed25519.pub' (que es nuestra clave 
+pública) y subirlo dos veces, una como 'Authentication key' y otra como 'Signing key'.
+
+Una vez creado el repositorio y configuradas las claves SSH, volvemos al terminal 
+(que, recordamos, está conectado por SSH a la MV) y ejecutamos los siguientes comandos 
+para inicializar el repositorio local y relacionarlo con el repositorio remoto: 
+
+```console
+# Comandos de git para crear el nuevo repositorio:
+git init	# Inicializamos el repositorio
+git branch -M main	# Indicamos que la rama principal será "main"
+git remote add origin {dirección SSH del repositorio remoto}	# Indicamos la dirección SSH del repositorio remoto al que subiremos el código fuente de la aplicación.
+
+git add .	# Añadimos el código fuente al 'stage' de git.
+git commit -m "Subida del código fuente."	# 'Comprometemos' los archivos en el área de 'stage' y le añadimos un comentario descriptivo.
+git push --set-upstream origin main	# Subimos el código al repositorio remoto, creando en él la rama 'main', que existe en local pero no aún en remoto. 
+```
+
+Este es el aspecto que tendrá ahora nuestro repositorio remoto en GitHub:
+
+![Repositorio remoto](./images/remote_repo.png)
+
+Con el código subido al repositorio remoto, ya sólo queda enlazar nuestra cuenta de 
+GitHub con Netlify. Para ello, volvemos al navegador y entramos a Netlify y seleccionamos 
+"Import from Git" e indicamos GitHub como nuestro proveedor. Nos saltará una ventana 
+emergente de GitHub preguntándonos si queremos ceder a Netlify permisos para consultar 
+información de nuestra cuenta y realizar determinadas acciones: 
+
+![Autorización de GitHub a Netlify](./images/popup_auth_netlify.png)
+
+Confirmamos la autorización y se nos llevará a otra página (en la misma ventana) 
+preguntándonos esta vez dónde queremos "instalar Netlify". Se nos presentará una lista 
+de las organizaciones que tenemos asociadas en GitHub, encabezada por nuestro usuario:
+
+![Instalar Netlify](./images/instalar_netlify.png)
+
+Seleccionamos nuestro usuario y se nos presentará la opción de instalar Netlify en todos 
+nuestros repositorios o en sólo una selección de estos. En este caso, indicaremos sólo 
+el repositorio 'practica3-4' y procedemos a la instalación de Netlify:
+
+![Selección repositorio](./images/seleccion_repositorio.png)
+
+Ahora se cerrará la ventana emergente y volvemos a la ventana original de Netlify en 
+la que estábamos originalmente realizando el enlace a GitHub. Podemos ver que ahora 
+nos aparece el repositorio que hemos seleccionado para que se instale Netlify:
+
+![Selección repositorio en Netlify](./images/sel_repo_netlify.png)
+
+Lo seleccionamos y llegaremos a la página de deploy, que nos ofrece una serie de 
+opciones para el despliegue. En principio, sólo es necesario indicar el nombre del 
+'site' (es conveniente comprobar la disponibilidad antes de intentar desplegarlo) 
+y podemos dejar el resto de opciones que aparecen predeterminadas:
+
+![Deploy desde la página de Netlify](./images/deploy_netlify.png)
+
+Netlify tardará un poco en realizar el despliegue. Cuando haya terminado, saltará un 
+mensaje de la página notificándonos que ha finalizado y podremos acceder a la 
+aplicación desplegada:
+
+![Aplicación desplegada en Netlify](./images/aplicacion_desplegada_netlify.png)
+
+Ahora, todos los cambios que realicemos sobre el código y que subamos a GitHub, se 
+realizarán también sobre la aplicación desplegada en Netlify. Para comprobarlo, 
+vamos a modificar el archivo ubicado en '/ruta_aplicacion/public/robots.txt'. 
+Primero, comprobamos su contenido directamente desde el navegador: 
+
+![Contenido inicial robots.txt](./images/contenido_inicial_robots.png)
+
+Modifico el contenido en local:
+
+![Modificación local](./images/mod_local_robots.png)
+
+Y ejecuto los siguientes comandos de git para subir los cambios a GitHub:
+
+```console
+git add .
+git commit -m "Modificación robótica"
+git push
+```
+
+Si recargamos el navegador, podremos ver el recurso con el contenido actualizado: 
+
+![Contenido automáticamente actualizado](./images/contenido_robots_actualizado.png)
+
+
+## Despliegue con Vercel
+
+
