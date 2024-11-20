@@ -52,6 +52,20 @@ mi caso, el 3000):
 
 ## Cuestiones sobre Node Express
 
+- ¿Dónde podemos ver qué script se está ejecutando (al realizar 'npm run start')?
+
+Al realizar 'npm run start' sobre el directorio raíz de nuestra aplicación estamos 
+ejecutando un script que viene especificado en el archivo 'package.json'. Concretamente, 
+dentro de este archivo existirá un bloque 'scripts' que indica qué debe ejecutarse al 
+realizar el comando 'npm run start'. En este ejemplo:
+
+![package.json script](./images/script_package.png)
+
+- ¿Qué comando se está ejecutando?
+
+En este caso, el bloque 'scripts' del 'package.json' indica que debe ejecutarse el 
+comando 'nodemon src/index.js' cuando tratemos de realizar 'npm run start'.
+
 
 ## Despliegue con Netlify
 
